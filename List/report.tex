@@ -1,0 +1,43 @@
+\documentclass[12pt]{article}
+
+
+
+\usepackage{geometry} % For adjusting page layout
+\geometry{a4paper,scale=0.8} % Adjust page margins and scaling
+
+\title{Linked List Class Testing}
+\author{Zhu Kongyang}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+This report aims to explain the reasons for the setup of various member functions in the linked list class testing program (the general format is AI-generated). To better test and become familiar with the \texttt{<cassert>} and \texttt{<stdexcept>} libraries, some functions have been tested for their usage and characteristics (although there are still a few error reporting mechanisms that are not yet clear).
+
+\section{Constructor and Destructor}
+The constructor is used to initialize the linked list, including setting up an empty list and building a list from an initialization list. The destructor is responsible for releasing the memory of all nodes in the linked list to prevent memory leaks.
+
+\section{Copy Constructor and Assignment Operator}
+The copy constructor and assignment operator are used to copy linked list objects. They ensure that when a linked list object is copied, all its nodes and structures are correctly replicated. The assignment operator uses the copy-and-swap technique to improve efficiency and simplify the code.
+
+\section{Move Constructor}
+The move constructor is used to handle rvalue references; it transfers the resources of a linked list object to another object without actual data copying, thereby improving performance.
+
+\section{Iterators}
+Iterators are abstract pointers for accessing container elements. This testing program provides \texttt{const\_iterator} and \texttt{iterator} for read-only and read-write access, respectively. Iterators allow users to traverse and manipulate the linked list in an STL-style.
+
+\section{Insertion and Deletion Operations}
+Insertion and deletion operations are among the core functionalities of a linked list. The \texttt{insert} and \texttt{erase} functions in this testing program simulate the behavior of adding and removing nodes in a linked list. These operations typically have a time complexity of O(1), making the linked list very efficient in these operations.
+
+\section{Boundary Condition Testing}
+The testing program also includes testing of boundary conditions for linked lists, such as operations on empty lists, single-element lists, and multi-element lists. These tests ensure that the linked list class works correctly under various circumstances. There are many iterator type returns that are incorrect in this section, especially represented by the \texttt{back()} and \texttt{pop\_back()} functions. The solution turned out to be to write out the original formula, add declarations, and then proceed step by step...
+
+\section{Exception Handling}
+Exception handling was also considered in the testing program. For example, when attempting to access an element outside the range of the linked list, the program will throw a \texttt{std::out\_of\_range} exception, ensuring the robustness of the program. It has to be said that adding an \texttt{at} function has produced many strange repetitive applications...
+
+\section{Conclusion}
+Through these testing functions, we have verified the basic operations, memory management, exception handling, and iterator functions of the linked list class. These tests ensure the reliability and efficiency of the linked list class in practical applications.
+
+\end{document}
