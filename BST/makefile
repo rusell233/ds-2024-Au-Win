@@ -1,42 +1,27 @@
 # 定义编译器
 CXX = g++
-
 # 定义编译选项
-CXXFLAGS = -std=c++11 -Wall -Wextra -pedantic
+CXXFLAGS = -O2
 
-# 定义链接选项
-LDFLAGS = 
-
-# 定义程序名
-PROGRAM = main
-
-# 定义报告的LaTeX文件和生成的PDF文件
-REPORT_TEX = report.tex
-REPORT_PDF = report.pdf
+# 定义xelatex编译器
+XELATEX = xelatex
 
 # 默认目标
-all: $(PROGRAM)
+all: run
 
-# 编译并运行程序
-run: $(PROGRAM)
-	./$(PROGRAM)
+# 编译并链接生成可执行文件，并运行程序
+run: test.cpp
+	$(CXX) $(CXXFLAGS) test.cpp -o test
+	./test
 
-# 编译报告并生成PDF
-report:
-	pdflatex $(REPORT_TEX)
-	pdflatex $(REPORT_TEX) # 可能需要两次编译以解决引用问题
+# 编译report.tex文件
+report: report.tex
+	$(XELATEX) report.tex
 
-# 编译程序
-$(PROGRAM): main.o 
-	$(CXX) $(LDFLAGS) -o $@ $^
-
-# 编译main.cpp
-main.o: main.cpp BST.h
-	$(CXX) $(CXXFLAGS) -c main.cpp
-
-
-# 清理编译生成的文件
+# 清理生成的可执行文件和PDF文件
 clean:
-	rm -f *.o $(PROGRAM) $(REPORT_PDF)
+	rm -f test
+	rm -f report.pdf
 
+# 伪目标，确保在运行前先编译
 .PHONY: all run report clean

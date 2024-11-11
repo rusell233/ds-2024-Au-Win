@@ -1,87 +1,40 @@
-\documentclass[12pt]{article}
-\usepackage[margin=1.5cm, includehead, includefoot, headsep=10pt, footskip=30pt]{geometry}
+\documentclass[12pt, a4paper]{article}
+\usepackage{ctex} % 支持中文
+\usepackage{amsmath} % 支持数学公式
+\usepackage{geometry} % 支持页面布局
+\geometry{left=2cm, right=2cm, top=2cm, bottom=2cm}
 
-% Load TikZ package
-\usepackage{tikz}
-\usetikzlibrary{trees}
+\title{二叉搜索树的删除操作实现分析}
+\author{朱孔阳}
+\date{\today}
 
 \begin{document}
-
-\title{Report on improvement in BST}
-\author{Zhu Kongyang}
 \maketitle
 
-\section{Remark}
-Thx to GPT for helping with the TikZ drawn BST diagrams!
+\section{引言}
+哈哈，latex能用了！本次修改没有改动大部分的模板名等等，不然test.cpp报一大堆错....
 
-\section{Unsolved Problems}
-Again my latex failed n' that's y I'm using English. I'm upgrading my computer, and I'll retry my debian cuz WSL's so STUPID. But the document compiled well on my classmate's ubuntu, so I'm not sure what the problem is. I'll try to fix it.
+\section{删除操作的实现}
+这次改进了删除操作，删去了原来remove函数的迭代，新的删除步骤如下：
 
-\section{PS}
-I didn't delete the Chinese version. The name is report\_chi.tex. U can check it out.
+\subsection{查找节点}
+首先，递归查找需要删除的节点。若节点不存在，则操作结束。
 
-\section{Implementation of the Modified remove Function}
-The detachMin function is used to find and detach the minimum node in a given subtree. The modified `remove` function handles node deletion in the following three scenarios:
+\subsection{删除叶子节点或只有一个子节点的节点}
+若节点为叶子节点或只有一个子节点，可以直接删除该节点，并将父节点对应子节点指针置空。
 
+\subsection{删除有两个子节点的节点}
+节点有两个子节点则以下两种方法二选一：
 \begin{itemize}
-  \item 1: The node to be deleted has no children. The node is simply deleted.
-  \item 2: The node to be deleted has one child. The node is deleted and replaced by its child.
-  \item 3: The node to be deleted has two children. Find the minimum node in the right subtree, copy its value to the current node, and then delete the minimum node in the right subtree.
+    \item 找到该节点的直接后继（右子树中的最小节点），将其值复制到当前节点，然后删除后继节点。
+    \item 找到该节点的直接前驱（左子树中的最大节点），将其值复制到当前节点，然后删除前驱节点。
 \end{itemize}
+本实现中，选择右子树中的最小节点作为后继。
 
-\section{Presentation and Analysis of Test Output Results}
+\subsection{平衡调整}
+在删除节点后，通过旋转操作来重新平衡树。
 
-The initial tree structure is as follows:
-
-\begin{tikzpicture}[sibling distance=5em, level distance=8em, 
-  every node/.style = {shape=rectangle, rounded corners, draw, align=center}]
-  \node {5}
-    child {node {3}
-      child {node {2}}
-      child {node {4}}
-    }
-    child {node {7}
-      child {node {6}}
-      child {node {8}}
-    };
-\end{tikzpicture}
-
-After removing element 3:
-
-\begin{tikzpicture}[sibling distance=5em, level distance=8em, 
-  every node/.style = {shape=rectangle, rounded corners, draw, align=center}]
-  \node {5}
-    child {node {2}}
-    child {node {7}
-      child {node {4}}
-      child {node {6}}
-      child {node {8}}
-    };
-\end{tikzpicture}
-
-After removing element 5:
-
-\begin{tikzpicture}[sibling distance=5em, level distance=8em, 
-  every node/.style = {shape=rectangle, rounded corners, draw, align=center}]
-  \node {7}
-    child {node {2}}
-    child {node {6}
-      child {node {4}}
-      edge from parent node [right] {}}
-    child {node {8} edge from parent node [right] {}};
-\end{tikzpicture}
-
-After removing element 8:
-
-\begin{tikzpicture}[sibling distance=5em, level distance=8em, 
-  every node/.style = {shape=rectangle, rounded corners, draw, align=center}]
-  \node {7}
-    child {node {2}}
-    child {node {6}
-      child {node {4}}
-      edge from parent node [right] {}};
-\end{tikzpicture}
-
-From the test results, it can be seen that after each deletion operation, the left subtree of any node only contains values less than that node, and the right subtree only contains values greater than that node. This indicates that the modified `remove` function is correct.
+\section{结论}
+通过上述步骤，二叉搜索树的删除操作能够有效地移除指定节点，同时保持树的结构和平衡，确保操作的效率。
 
 \end{document}
