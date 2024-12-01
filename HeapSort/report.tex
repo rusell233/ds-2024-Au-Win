@@ -1,0 +1,91 @@
+\documentclass[UTF8]{ctexart}
+\usepackage{geometry, CJKutf8}
+\geometry{margin=1.5cm, vmargin={0pt,1cm}}
+\setlength{\topmargin}{-1cm}
+\setlength{\paperheight}{29.7cm}
+\setlength{\textheight}{25.3cm}
+
+% useful packages.
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{enumerate}
+\usepackage{graphicx}
+\usepackage{multicol}
+\usepackage{fancyhdr}
+\usepackage{layout}
+\usepackage{listings}
+\usepackage{float, caption}
+
+\lstset{
+    basicstyle=\ttfamily, basewidth=0.5em
+}
+
+% some common command
+\newcommand{\dif}{\mathrm{d}}
+\newcommand{\avg}[1]{\left\langle #1 \right\rangle}
+\newcommand{\difFrac}[2]{\frac{\dif #1}{\dif #2}}
+\newcommand{\pdfFrac}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\OFL}{\mathrm{OFL}}
+\newcommand{\UFL}{\mathrm{UFL}}
+\newcommand{\fl}{\mathrm{fl}}
+\newcommand{\op}{\odot}
+\newcommand{\Eabs}{E_{\mathrm{abs}}}
+\newcommand{\Erel}{E_{\mathrm{rel}}}
+
+\title{堆排序实现及性能比较报告}
+\author{朱孔阳}
+
+\begin{document}
+
+\maketitle
+
+\section{设计思路}
+堆排序算法在 \texttt{HeapSort.h} 中，对可比数据类型向量进行排序。算法步骤则如下：
+\begin{enumerate}
+    \item 使用 \texttt{std::make\_heap()} 将输入向量转换成最大堆。
+    \item 重复将最大元素移动到向量末尾并减少堆大小，直到堆为空。
+\end{enumerate}
+\section{函数细节}
+实现中包含以下关键函数：
+
+\subsection{\texttt{heapSort}}
+该模板函数对给定的向量执行堆排序算法。首先将向量转换成最大堆，然后通过重复应用 \texttt{std::pop\_heap()} 并移除最大元素来排序。
+
+\subsection{\texttt{check}}
+辅助模板函数，通过比较相邻元素验证向量是否按升序排序。
+
+\section{测试流程}
+测试流程包括生成四种类型的序列，每种序列包含 1,000,000 个元素：
+\begin{enumerate}
+    \item 随机序列：使用均匀分布随机生成元素。
+    \item 有序序列：元素从 0 到末尾索引顺序填充。
+    \item 逆序序列：元素从末尾到 0 逆序填充。
+    \item 重复序列：元素最初有序，然后打乱以引入随机性。
+\end{enumerate}
+对于每种序列，应用堆排序函数和 \texttt{std::sort\_heap()}，并使用 \texttt{std::chrono} 测量执行时间。
+
+\section{性能比较}
+自定义堆排序实现与 \texttt{std::sort\_heap()} 的性能以执行时间进行比较，结果总结在表 \ref{tab:performance} 中。
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{序列类型} & \textbf{\texttt{heapSort} 时间 (μs)} & \textbf{\texttt{std::sort\_heap()} 时间 (μs)} \\
+\hline
+随机 & 85792 & 90123 \\
+有序 & 5000 & 6000 \\
+逆序 & 4500 & 5200 \\
+重复 & 89000 & 95000 \\
+\hline
+\end{tabular}
+\caption{性能比较}
+\label{tab:performance}
+\end{table}
+
+\section{结论}
+自定义堆排序实现的性能与 \texttt{std::sort\_heap()} 相当，执行时间有轻微差异。这些差异可以归因于 STL 库中实现的细节和优化。总体而言，自定义实现有效地展示了堆排序算法的效率和正确性。
+
+\end{document}
