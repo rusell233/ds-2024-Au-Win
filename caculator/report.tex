@@ -1,0 +1,37 @@
+﻿\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{ctex} % 支持中文
+\usepackage{amsmath} % 数学公式
+\usepackage{graphicx} % 插入图片
+\usepackage{geometry} % 页面布局
+\geometry{a4paper,scale=0.8}
+
+\title{计算器程序设计报告}
+\author{朱孔阳}
+
+\begin{document}
+
+\maketitle
+
+\section{写在前面}
+如果你看到这段话，意味着我没能修复前一版的程序，那版是用了中缀转前缀写的，但是输出变成了这个：������һ����׺���ʽ1+1��������2。QwQ。所以这一版干脆用了个比较符合人类阅读习惯的写法。
+\section{PS}
+老一版分开写的，保存在了`prev`文件夹里，但是没有`main.cpp`。
+
+\section{符合人类宝宝体质的设计思路}
+\subsection{词法分析}
+首先检查每个字符是否合法，包括数字、运算符、括号和空格。非法字符将导致程序异常退出。
+
+\subsection{解析表达式}
+用两个栈来存储操作数和操作符。操作数栈用于存储数字，而操作符栈用于存储运算符和括号。函数 `precedence` 来确定运算符的优先级。加减、乘除优先级为1、2。
+
+\subsection{应用运算符}
+ `applyOp` 函数来执行具体的运算操作。程序会检查除数是否为0，若有除0的操作输出nan。同时程序支持指数和负数运算。
+
+\section{主要函数}
+`parsenumber`函数检测字符类型并转化为相应类型。 `evaluator` 函数处理中缀表达式，并使用栈来计算结果。
+
+\section{缺陷}
+程序包含多个测试用例，包括合法和非法的输入，但是由于用的是catch和exit写的错误模块，没法一次性测试所有错误案例...另外由于写法比较简单所以速度上面可能有点欠缺。
+
+\end{document}
