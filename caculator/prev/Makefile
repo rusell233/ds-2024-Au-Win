@@ -1,32 +1,21 @@
-# 定义编译器
-CXX = g++
+CC=g++
+CFLAGS=-std=c++11 -Wall
 
-# 定义编译选项
-CXXFLAGS = -Wall -std=c++11
+all: calculator run
 
-# 定义目标文件
-TARGET = calculator
+calculator:
+	$(CC) $(CFLAGS) calculator.cpp -o calculator
 
-# 定义源文件
-SOURCES = main.cpp
+run:
+	./calculator
 
-# 定义对象文件
-OBJECTS = $(SOURCES:.cpp=.o)
+report:
+	pdflatex report.tex
 
-# 默认目标
-all: $(TARGET)
-
-# 链接目标
-$(TARGET): $(OBJECTS)
-	$(CXX) $(CXXFLAGS) -o $@ $^
-
-# 编译源文件
-%.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@
-
-# 清理编译生成的文件
 clean:
-	rm -f $(OBJECTS) $(TARGET)
+	rm -f calculator
+	rm -f report.aux
+	rm -f report.log
+	rm -f report.pdf
 
-# 伪目标，以便在没有目标文件时执行
-.PHONY: all clean
+.PHONY: all calculator run report clean

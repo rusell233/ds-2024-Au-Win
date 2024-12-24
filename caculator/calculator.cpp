@@ -1,211 +1,171 @@
+ï»¿#include "calculator.h"
 #include <iostream>
-#include <stack>
 #include <cctype>
 #include <cmath>
-#include <string>
-#include <limits>
+#include <sstream>
+#include <map>
+#include <vector>
 
 using namespace std;
 
-int precedence(char op) {
-    if (op == '+' || op == '-') {
+template <typename T>
+T pop_and_return(std::stack<T>& s){
+    if (s.empty()){
+        throw std::runtime_error("ç¼ºå°‘å…ƒç´ ï¼");
+    }
+    T value = s.top(); // è·å–æ ˆé¡¶å…ƒç´ 
+    s.pop(); // ç§»é™¤æ ˆé¡¶å…ƒç´ 
+    return value; // è¿”å›æ ˆé¡¶å…ƒç´ çš„å€¼
+}
+
+int precedence(char op)
+{
+    if (op == '+' || op == '-')
+    {
         return 1;
     }
-    if (op == '*' || op == '/') {
+    if (op == '*' || op == '/')
+    {
         return 2;
     }
     return 0;
 }
 
-double applyOp(double a, double b, char op) {
-    switch (op) {
+double applyOp(double a, double b, char op)
+{
+    switch (op)
+    {
     case '+': return a + b;
     case '-': return a - b;
     case '*': return a * b;
-    case '/': return b != 0 ? a / b : numeric_limits<double>::quiet_NaN(); // ·ÀÖ¹³ıÒÔ0
+    case '/': return b != 0 ? a / b : numeric_limits<double>::quiet_NaN(); 
     default: throw runtime_error("Invalid operator");
     }
 }
 
-template <typename T>
-T pop_and_return(stack<T>& s) {
-    if (s.empty()) {
-        cout << "ILLEGAL" << endl;
-        exit(0);
+int is_op(char c){
+    if (c == '+' || c == '-' || c == '(' || c == ')' || c == '*' || c == '/'){
+        return 1;
     }
-    T value = s.top();
-    s.pop();
-    return value;
+    return 0;
 }
 
-bool is_op(char c) {
-    return c == '+' || c == '-' || c == '*' || c == '/' || c == '(' || c == ')';
-}
-
-bool is_legitimate(const string& infix) {
-    for (char c : infix) {
-        if (!isspace(c) && !isdigit(c) && c != '.' && c != 'e' && c != 'E' && !is_op(c)) {
-            cout << "ILLEGAL" << endl;
-            exit(0);
+int is_legitimate(const string& infix){
+    for (char c : infix){
+        if (!isspace(c) && !isdigit(c) && !is_op(c) && c != '.' && c != 'e'){
+                throw std::runtime_error("è¾“å…¥å­—ç¬¦æœ‰é—®é¢˜"); 
         }
+    }
+    return 1;
+}
+
+bool in_Bds(size_t i, const string& infix) {
+    return i < infix.size();
+}
+
+double evaluator(const string& infix){
+    try{
+    is_legitimate(infix);
+    stack<double> n; 
+    stack<char> s;
+    int isNegative = 1;
+	int pow = 1;
+    for (size_t i = 0; in_Bds(i, infix); ++i)
+    {
+        if (isspace(infix[i]))
+        {
+            continue;
+        }
+        if (isdigit(infix[i])){
+            int count = 0;
+            size_t start = i;
+            while (in_Bds(i, infix) && (isdigit(infix[i]) || infix[i] == '.')){
+                if (infix[i] == '.'){
+                    count++;
+                }
+                ++i;
+            }
+            if (count > 1)throw std::runtime_error("å¤šä¸ªå°æ•°ç‚¹");
+            if (infix[i] == 'e'|| infix[i] == 'E'){
+                string m = "";
+                i++;
+                if (i >= infix.size() || (infix[i] != '-' && !isdigit(infix[i]))){
+                    throw std::runtime_error("ç§‘å­¦è®¡æ•°æ³•æ ¼å¼ä¸æ­£ç¡®");
+                }
+                if (isdigit(infix[i])|| infix[i] == '+'||infix[i]=='-') {
+                   do{
+                        m+= infix[i];
+                        i++;
+                   } while (isdigit(infix[i]) && in_Bds(i, infix));                   
+                   pow = stod(m);
+                }
+                if (in_Bds(i, infix) && !is_op(infix[i])){
+					throw std::runtime_error("ç§‘å­¦è®¡æ•°æ³•æ ¼å¼ä¸æ­£ç¡®");
+				}
+            }
+            n.push(pow * isNegative * stod(infix.substr(start, i - start)));
+            isNegative = 1;
+            i--;
+        }
+        else if (infix[i] == '('){
+            s.push(infix[i]);
+        }
+        else if (infix[i] == ')'){
+            while (!s.empty() && s.top() != '(')
+            {
+                char op = pop_and_return(s);
+                n.push(applyOp(pop_and_return(n), pop_and_return(n), op));
+            }
+            if (!s.empty() && s.top() != '(') {
+                throw std::runtime_error("æ‹¬å·ä¸åŒ¹é…");
+            }
+            s.pop(); // å¼¹å‡º '('
+        }
+        else
+        { // æ“ä½œç¬¦
+            if ((i == 0 || is_op(infix[i - 1])) && infix[i - 1] != ')' && infix[i] == '-' && isNegative == 1)
+            {
+                isNegative = -1;
+                continue;
+            }
+            while (!s.empty() && precedence(s.top()) >= precedence(infix[i])){
+                char op = pop_and_return(s);
+                n.push(applyOp(pop_and_return(n), pop_and_return(n), op));
+            }
+            if (n.empty() && !s.empty()){
+                throw std::runtime_error("ç®—ç¬¦æœ‰é—®é¢˜");
+            }
+            s.push(infix[i]);
+        }
+    }
+    while (!s.empty()){
+        if (s.top() == '(' || s.top() == ')'){
+            throw std::runtime_error("æ‹¬å·ä¸åŒ¹é…");
+        }
+        char op = pop_and_return(s);
+        n.push(applyOp(pop_and_return(n), pop_and_return(n), op));
+    }
+    double result = pop_and_return(n);
+    if (!n.empty()){
+        throw std::runtime_error("æ•°å­—æœ‰é—®é¢˜");
+    }
+	return result;
+	}
+    catch (const exception& e) {
+        cout << "å‡ºç°é”™è¯¯: " << e.what() << '\n';
+        return false;
     }
     return true;
 }
 
-double parse_number(const string& infix, size_t& index) {
-    double value = 0;
-    double fraction = 1;
-    bool hasFraction = false;
-    bool isNegative = false;
-
-    if (infix[index] == '-') {
-        isNegative = true;
-        ++index;
+bool evaluate(const string& infix, double& result) {
+    try {
+        result = evaluator(infix);
+        return true;
     }
-
-    while (index < infix.size() && (isdigit(infix[index]) || infix[index] == '.')) {
-        if (infix[index] == '.') {
-            hasFraction = true;
-        }
-        else {
-            value = value * 10 + (infix[index] - '0');
-            if (hasFraction) {
-                fraction *= 0.1;
-            }
-        }
-        ++index;
+    catch (const exception& e) {
+        cout << "An exception occurred: " << e.what() << '\n';
+        return false;
     }
-
-    value *= fraction;
-
-    if (index < infix.size() && (infix[index] == 'e' || infix[index] == 'E')) {
-        ++index;
-
-        if (index < infix.size() && infix[index] == '-') {
-            ++index;
-        }
-
-        double expValue = 0;
-        while (index < infix.size() && isdigit(infix[index])) {
-            expValue = expValue * 10 + (infix[index] - '0');
-            ++index;
-        }
-
-        value *= pow(10, expValue);
-    }
-
-    if (isNegative) {
-        value = -value;
-    }
-
-    return value;
 }
 
-double evaluator(const string& infix) {
-    is_legitimate(infix);
-    stack<double> values;
-    stack<char> ops;
-    size_t index = 0;
-    char prev_op = 0; // ÓÃÓÚ´æ´¢ÉÏÒ»¸ö²Ù×÷·û
-
-    while (index < infix.size()) {
-        char c = infix[index];
-        if (isspace(c)) {
-            ++index;
-            continue;
-        }
-
-        if (isdigit(c) || c == '.' ) {   //|| ( c == '-' && isdigit(infix[index+1]) )
-            double num = parse_number(infix, index);
-            values.push(num);
-        }
-        else if (c == '(') {
-            ops.push(c);
-            ++index;
-        }
-        else if (c == ')') {
-            while (!ops.empty() && ops.top() != '(') {
-                double val2 = pop_and_return(values);
-                double val1 = pop_and_return(values);
-                char op = pop_and_return(ops);
-                values.push(applyOp(val1, val2, op));
-            }
-            if (!ops.empty() && ops.top() != '(') {
-                cout << "ILLEGAL" << endl;
-                exit(0);
-            }
-            ops.pop();
-            ++index;
-        }
-        else if (is_op(c)) {
-            if (c == '-' && ( prev_op != 0 )) {
-                // ´¦Àí¸ºÊıµÄÇé¿ö
-                values.push( -1*pop_and_return(values));
-            }
-            else {
-                while (!ops.empty() && precedence(ops.top()) >= precedence(c)) {
-                    double val2 = pop_and_return(values);
-                    double val1 = pop_and_return(values);
-                    char op = pop_and_return(ops);
-                    values.push(applyOp(val1, val2, op));
-                }
-                ops.push(c);
-            }
-            prev_op = c;
-            ++index;
-        }
-    }
-
-    while (!ops.empty()) {
-        if (ops.top() == '(' || ops.top() == ')') {
-            cout << "ILLEGAL" << endl;
-            exit(0);
-        }
-        double val2 = pop_and_return(values);
-        double val1 = pop_and_return(values);
-        char op = pop_and_return(ops);
-        values.push(applyOp(val1, val2, op));
-    }
-
-   if (values.size() != 1) {
-        cout << "ILLEGAL" << endl;
-        exit(0);
-    }
-
-    return values.top();
-}
-
-int main() {
-    // ºÏ·¨µÄ²âÊÔÓÃÀı
-    cout << "1.01*(2.2+3*4) = " << evaluator("1.01*(2.2+3*4)") << endl;
-    cout << "1+2 = " << evaluator("1+2") << endl;
-    cout << "1-2 = " << evaluator("1-2") << endl;
-    cout << "1*2 = " << evaluator("1*2") << endl;
-    cout << "1/2 = " << evaluator("1/2") << endl;
-    cout << "1+2*3 = " << evaluator("1+2*3") << endl;
-    cout << "1*(2+3) = " << evaluator("1*(2+3)") << endl;
-    cout << "1.01*(2.2+3*4) = " << evaluator("1.01*(2.2+3*4)") << endl;
-    cout << "1*(2*(3+4)) = " << evaluator("1*(2*(3+4))") << endl;
-    cout << "1+2e2 = " << evaluator("1+2e2") << endl;
-    cout << "1+2e-1 = " << evaluator("1+2e-1") << endl;
-    cout << "1.1e2+(2.1e-1*3.1e-1) = " << evaluator("1.1e2+(2.1e-1*3.1e-1)") << endl;
-    cout << "1+-2 = " << evaluator("1+-2") << endl;
-    cout << "1*-2 = " << evaluator("-2*1") << endl;
-    cout << "1*(-2+1) = " << evaluator("1*(-2+1)") << endl;
-    cout << "-1+2 = " << evaluator("-1+2") << endl;
-    cout << "1*(1+2)-1 = " << evaluator("1*(1+2)-1") << endl;
-
-    // ·Ç·¨µÄ²âÊÔÓÃÀı
-    cout << "1+*(1+2) = " << evaluator("1+*(1+2)") << endl;
-    cout << "1-((1+2) = " << evaluator("1-((1+2)") << endl;
-    cout << "1*(!1+2) = " << evaluator("1*(!1+2)") << endl;
-    cout << "1.00.1+(1+2) = " << evaluator("1.00.1+(1+2)") << endl;
-    cout << "1/(1-1) = " << evaluator("1/(1-1)") << endl;
-    cout << "1+--2 = " << evaluator("1+--2") << endl;
-    cout << "1++2 = " << evaluator("1++2") << endl;
-    cout << "1-(1+2)- = " << evaluator("1-(1+2)-") << endl;
-    cout << "1*2e--2 = " << evaluator("1*2e--2") << endl;
-    cout << "1*2e = " << evaluator("1*2e") << endl;
-
-    return 0;
-}

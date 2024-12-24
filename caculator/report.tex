@@ -1,37 +1,84 @@
-ï»¿\documentclass[12pt]{article}
-\usepackage[utf8]{inputenc}
-\usepackage{ctex} % æ”¯æŒä¸­æ–‡
-\usepackage{amsmath} % æ•°å­¦å…¬å¼
-\usepackage{graphicx} % æ’å…¥å›¾ç‰‡
-\usepackage{geometry} % é¡µé¢å¸ƒå±€
-\geometry{a4paper,scale=0.8}
+\documentclass[UTF8]{ctexart}
+\usepackage{geometry, CJKutf8}
+\geometry{margin=1.5cm, vmargin={0pt,1cm}}
+\setlength{\topmargin}{-1cm}
+\setlength{\paperheight}{29.7cm}
+\setlength{\textheight}{25.3cm}
 
-\title{è®¡ç®—å™¨ç¨‹åºè®¾è®¡æŠ¥å‘Š}
-\author{æœ±å­”é˜³}
+\title{C++ ÖÐ×º±í´ïÊ½ÇóÖµÆ÷±¨¸æ}
+\author{Öì¿×Ñô}
 
 \begin{document}
 
 \maketitle
 
-\section{å†™åœ¨å‰é¢}
-å¦‚æžœä½ çœ‹åˆ°è¿™æ®µè¯ï¼Œæ„å‘³ç€æˆ‘æ²¡èƒ½ä¿®å¤å‰ä¸€ç‰ˆçš„ç¨‹åºï¼Œé‚£ç‰ˆæ˜¯ç”¨äº†ä¸­ç¼€è½¬å‰ç¼€å†™çš„ï¼Œä½†æ˜¯è¾“å‡ºå˜æˆäº†è¿™ä¸ªï¼šï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½×ºï¿½ï¿½ï¿½Ê½1+1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½2ã€‚QwQã€‚æ‰€ä»¥è¿™ä¸€ç‰ˆå¹²è„†ç”¨äº†ä¸ªæ¯”è¾ƒç¬¦åˆäººç±»é˜…è¯»ä¹ æƒ¯çš„å†™æ³•ã€‚
-\section{PS}
-è€ä¸€ç‰ˆåˆ†å¼€å†™çš„ï¼Œä¿å­˜åœ¨äº†`prev`æ–‡ä»¶å¤¹é‡Œï¼Œä½†æ˜¯æ²¡æœ‰`main.cpp`ã€‚
+\section{ÒýÑÔ}
+¿´µ½Õâ¸öËµÃ÷ÎÒ³É¹¦½â¾öÁËVS×æ´«µÄÖÐÎÄÂÒÂëºÍ±àÒëÆ÷µÄÎÊÌâ¡£ÁíÍâ¸ÐÐ»AmentosµÄ²©¿Í£¬°ïÎÒÕû³öÁËÖÐ×º×ªºó×ºµÄË¼Â·¡£
 
-\section{ç¬¦åˆäººç±»å®å®ä½“è´¨çš„è®¾è®¡æ€è·¯}
-\subsection{è¯æ³•åˆ†æž}
-é¦–å…ˆæ£€æŸ¥æ¯ä¸ªå­—ç¬¦æ˜¯å¦åˆæ³•ï¼ŒåŒ…æ‹¬æ•°å­—ã€è¿ç®—ç¬¦ã€æ‹¬å·å’Œç©ºæ ¼ã€‚éžæ³•å­—ç¬¦å°†å¯¼è‡´ç¨‹åºå¼‚å¸¸é€€å‡ºã€‚
+\section{ÊµÏÖ¹¦ÄÜ}
+\begin{itemize}
+    \item ËÄÔòÔËËã¡£
+    \item ¸ºÊý¡¢Ð¡Êý¡¢¿ÆÑ§¼ÆÊý·¨µÄ½âÎö¡£
+    \item Ï¸»¯µÄ´íÎó´¦Àí£º²»ÔÙÊä³öillegal£¬¶øÊÇÊä³ö¾ßÌåµÄ´íÎóÐÅÏ¢¡£
+\end{itemize}
 
-\subsection{è§£æžè¡¨è¾¾å¼}
-ç”¨ä¸¤ä¸ªæ ˆæ¥å­˜å‚¨æ“ä½œæ•°å’Œæ“ä½œç¬¦ã€‚æ“ä½œæ•°æ ˆç”¨äºŽå­˜å‚¨æ•°å­—ï¼Œè€Œæ“ä½œç¬¦æ ˆç”¨äºŽå­˜å‚¨è¿ç®—ç¬¦å’Œæ‹¬å·ã€‚å‡½æ•° `precedence` æ¥ç¡®å®šè¿ç®—ç¬¦çš„ä¼˜å…ˆçº§ã€‚åŠ å‡ã€ä¹˜é™¤ä¼˜å…ˆçº§ä¸º1ã€2ã€‚
+\subsection{Ä£°åº¯Êý pop\_and\_return}
+¸Ãº¯ÊýÈ¡×Ôpython£¬ÓÃÓÚ´ÓÕ»ÖÐµ¯³ö²¢·µ»ØÕ»¶¥ÔªËØ¡£ÊÂÊµÉÏÕâ¸öº¯ÊýÔÚ×î³õµÄÒ»°æÀï±»ÕûºÏ½øÁËÒ»¸ö×Ô¶¨ÒåµÄÀàÕ»Àï£¬ºóÀ´¼øÓÚÔËËãÐ§ÂÊÈ¡ÏûÁËÕâ¸öÀàÕ»
 
-\subsection{åº”ç”¨è¿ç®—ç¬¦}
- `applyOp` å‡½æ•°æ¥æ‰§è¡Œå…·ä½“çš„è¿ç®—æ“ä½œã€‚ç¨‹åºä¼šæ£€æŸ¥é™¤æ•°æ˜¯å¦ä¸º0ï¼Œè‹¥æœ‰é™¤0çš„æ“ä½œè¾“å‡ºnanã€‚åŒæ—¶ç¨‹åºæ”¯æŒæŒ‡æ•°å’Œè´Ÿæ•°è¿ç®—ã€‚
+\subsection{º¯Êý precedence}
+¸Ãº¯Êý·µ»Ø²Ù×÷·ûµÄÓÅÏÈ¼¶£¬ÓÃÓÚÈ·¶¨²Ù×÷µÄË³Ðò¡£
 
-\section{ä¸»è¦å‡½æ•°}
-`parsenumber`å‡½æ•°æ£€æµ‹å­—ç¬¦ç±»åž‹å¹¶è½¬åŒ–ä¸ºç›¸åº”ç±»åž‹ã€‚ `evaluator` å‡½æ•°å¤„ç†ä¸­ç¼€è¡¨è¾¾å¼ï¼Œå¹¶ä½¿ç”¨æ ˆæ¥è®¡ç®—ç»“æžœã€‚
+\subsection{º¯Êý applyOp}
+¸Ãº¯Êý¸ù¾Ý¸ø¶¨µÄ²Ù×÷·ûÖ´ÐÐÁ½¸ö²Ù×÷ÊýµÄÔËËã¡£
 
-\section{ç¼ºé™·}
-ç¨‹åºåŒ…å«å¤šä¸ªæµ‹è¯•ç”¨ä¾‹ï¼ŒåŒ…æ‹¬åˆæ³•å’Œéžæ³•çš„è¾“å…¥ï¼Œä½†æ˜¯ç”±äºŽç”¨çš„æ˜¯catchå’Œexitå†™çš„é”™è¯¯æ¨¡å—ï¼Œæ²¡æ³•ä¸€æ¬¡æ€§æµ‹è¯•æ‰€æœ‰é”™è¯¯æ¡ˆä¾‹...å¦å¤–ç”±äºŽå†™æ³•æ¯”è¾ƒç®€å•æ‰€ä»¥é€Ÿåº¦ä¸Šé¢å¯èƒ½æœ‰ç‚¹æ¬ ç¼ºã€‚
+\subsection{º¯Êý is\_op}
+¸Ãº¯Êý¼ì²éÒ»¸ö×Ö·ûÊÇ·ñÊÇ²Ù×÷·û¡£
+
+\subsection{º¯Êý is\_legitimate}
+¸Ãº¯Êý¼ì²éÖÐ×º±í´ïÊ½ÊÇ·ñ°üº¬·Ç·¨×Ö·û¡£
+
+\subsection{º¯Êý evaluator}
+¸Ãº¯ÊýÊÇÇóÖµÆ÷µÄºËÐÄ£¬Ëü½âÎöÖÐ×º±í´ïÊ½²¢¼ÆËã½á¹û¡£kimi×ÜÊÇÏ²»¶ÓÃexit£¬ÕâÀï¸ÄÓÃÁËÒì³£´¦Àítry-catch¡£
+
+\subsection{º¯Êý evaluate}
+¸Ãº¯ÊýÊÇÓÃ»§½Ó¿Ú£¬Ëüµ÷ÓÃ `evaluator` ²¢´¦Àí¿ÉÄÜµÄÒì³£¡£µ«ÊÇÀïÃæÓÐÒ»¸öbugÎÒÕÒÁËºÃ¾ÃÃ»ÕÒ³öÀ´£¬¾ÍÊÇÊä³ö´íÎóµÄÊ±ºò»áÊä³öÒ»¸ö½á¹ûÎªÁãQwQ¡£
+
+\section{²âÊÔÓÃÀý}
+\subsection{ÕýÈ·±í´ïÊ½µÄ²âÊÔ½á¹û}
+\begin{itemize}
+    \item "3 + 4" ·µ»Ø 7
+    \item "6 - 2" ·µ»Ø 4
+    \item "2 * 3" ·µ»Ø 6
+    \item "8 / 2" ·µ»Ø 4
+    \item "3 + 5 * 2" ·µ»Ø 13
+    \item "(3 + 5) * 2" ·µ»Ø 16
+    \item "10 / 2 + 3 - 1" ·µ»Ø 8
+    \item "3.5 + 2" ·µ»Ø 5.5
+    \item "10 - 5.5" ·µ»Ø 4.5
+    \item "2 * (3 + 4) / 5" ·µ»Ø 2.4
+    \item "1e2" ·µ»Ø 100
+    \item "1.5e-3" ·µ»Ø 0.0015
+    \item "1.0E+5" ·µ»Ø 100000
+    \item "1.2e1+3" ·µ»Ø 1200
+\end{itemize}
+
+\subsection{´íÎó±í´ïÊ½µÄ²âÊÔ½á¹û}
+\begin{itemize}
+    \item "3 + * 4" Å×³öÒì³££ºÈ±ÉÙ²Ù×÷Êý
+    \item "3 + ( 4" Å×³öÒì³££ºÈ±ÉÙ±ÕÀ¨ºÅ
+    \item "3 + 4 *" Å×³öÒì³££º¶àÓàµÄ²Ù×÷·û
+    \item "3 + 4 5" Å×³öÒì³££ºÈ±ÉÙ²Ù×÷·û
+    \item "3 ++ 4" Å×³öÒì³££º¶àÓàµÄ¼ÓºÅ
+    \item "3 + ( 4 * )" Å×³öÒì³££º¿Õ±í´ïÊ½
+    \item "3 + . . 4" Å×³öÒì³££º¶à¸öÐ¡Êýµã
+    \item "3e++2" Å×³öÒì³££º´íÎóµÄ¿ÆÑ§¼ÇÊý·¨
+    \item "3e-2.5" Å×³öÒì³££º¸ºÖ¸Êý²»ÊÇÕûÊý
+    \item "3e" Å×³öÒì³££ºÈ±ÉÙÖ¸Êý
+    \item "3e-" Å×³öÒì³££ºÈ±ÉÙÖ¸Êý
+    \item "3.2.4" Å×³öÒì³££º´íÎóµÄÐ¡ÊýµãÊ¹ÓÃ
+    \item "3 + (4 * 5" Å×³öÒì³££ºÀ¨ºÅ²»Æ¥Åä
+    \item "- - 3" Å×³öÒì³££ºÁ¬Ðø¸ººÅ
+\end{itemize}
+
 
 \end{document}

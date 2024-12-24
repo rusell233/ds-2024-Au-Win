@@ -1,21 +1,36 @@
-CC=g++
-CFLAGS=-std=c++11 -Wall
+﻿# Makefile
 
-all: calculator run
+# 定义编译器和编译选项
+CXX := g++
+CXXFLAGS := -std=c++11 -Wall
 
-calculator:
-	$(CC) $(CFLAGS) calculator.cpp -o calculator
+# 定义xelatex命令
+XELATEX := xelatex
 
-run:
-	./calculator
+# 定义目标文件和源文件
+TARGET := main
+SOURCES := main.cpp calculator.cpp
+HEADERS := calculator.h
 
+# 定义 Phony 目标
+.PHONY: run report clean
+
+# 默认目标
+all: run
+
+# 编译并运行程序
+run: $(TARGET)
+	./$(TARGET)
+
+# 链接目标文件和源文件
+$(TARGET): $(SOURCES) $(HEADERS)
+	$(CXX) $(CXXFLAGS) -o $@ $^
+
+# 使用 xelatex 编译 LaTeX 文档
 report:
-	pdflatex report.tex
+	$(XELATEX) report.tex
+	$(XELATEX) report.tex
 
+# 清理生成的文件
 clean:
-	rm -f calculator
-	rm -f report.aux
-	rm -f report.log
-	rm -f report.pdf
-
-.PHONY: all calculator run report clean
+	rm -f $(TARGET) report.pdf report.aux report.log
